@@ -1,5 +1,5 @@
 import avatar from "../../assets/img/postAvatar.jpg";
-import PostLink from "../../assets/icons/postLink";
+import PostLink from "../../assets/icons/PostLink";
 
 import { useSelector } from "react-redux";
 import { getCurrentUserSelector } from "../../redux/users/users-selectors";

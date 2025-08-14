@@ -3,7 +3,7 @@ import Search from "../../../assets/icons/Search";
 import Explore from "../../../assets/icons/Explore";
 import Message from "../../../assets/icons/Message";
 import Notification from "../../../assets/icons/Notification";
-import Create from "../../../assets/icons/create";
+import Create from "../../../assets/icons/Create";
 
 import { NavLink } from "react-router-dom";
 
