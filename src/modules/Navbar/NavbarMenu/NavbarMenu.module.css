@@ -1,0 +1,41 @@
+.navMenu {
+    margin-bottom: 68px;
+}
+
+.elem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 29px;
+}
+
+.elem div {
+    text-decoration: none;
+}
+
+.iconWrap {
+    width: 24px;
+    height: 24px;
+}
+
+.item {
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+}
+
+.item:global(.active) {
+    font-weight: 700;
+}
+
+.item:hover {
+    text-decoration: underline;
+}
+
+.iconActive svg path {
+    fill: #007BFF;
+}
+
+.activeItem {
+    font-weight: 700;
+}

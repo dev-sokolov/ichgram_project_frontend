@@ -1,0 +1,96 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.wrapBackgroundSection {
+    margin-left: 125px;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+}
+
+.backgroundSection {
+    margin-top: 197px;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 2;
+    pointer-events: none;
+    margin-left: -125px;
+}
+
+.wrapContent {
+    display: flex;
+    position: absolute;
+    z-index: 2;
+    margin-top: 47px;
+}
+
+.postImg {
+    width: 577px;
+    height: 722px;
+}
+
+.postImg img {
+    width: 100%;
+    height: 100%;
+}
+
+.content {
+    background-color: #ffffff;
+}
+
+.wrapHead {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    margin: 8px 0 8px 9px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.username {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.subscribe {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0095F6;
+}
+
+.link {
+    margin-left: auto;
+}
+
+.more {
+    margin-left: auto;
+    margin-right: 14px;
+    cursor: pointer;
+}
+
+.more:hover {
+    font-size: 18px;
+    text-decoration: underline;
+}

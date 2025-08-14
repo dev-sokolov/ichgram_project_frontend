@@ -1,0 +1,122 @@
+.container {
+    margin-top: 81px;
+    display: flex;
+    justify-content: center;
+}
+
+.wrappForm {
+    padding: 25px 45px 84px;
+    border-radius: 3px;
+    border: 1px solid #DBDBDB;
+    border-width: 1px;
+}
+
+.titleBlock {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;      
+
+}
+
+.title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.descr {
+    font-size: 14px;
+    line-height: 18px;
+    color: #737373;
+    margin-bottom: 13px;
+    text-align: center;
+}
+
+.img {
+    display: flex;
+    justify-content: center;
+}
+
+.wrappInfo {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+    padding: 14px 0;
+    border-radius: 3px;
+    border: 1px solid #DBDBDB;
+    background-color: #FAFAFA;
+    border-width: 1px;
+    text-align: center;
+}
+
+.wrappInfo p a {
+    text-decoration: none;
+    color: #262626;
+}
+
+.wrappInfo p a:hover {
+    text-decoration: underline;
+}
+
+.decorElement {
+    font-weight: 600;
+    font-size: 13px;
+    color: #737373;
+}
+
+.divider {
+    position: relative;
+    text-align: center;
+    color: #737373;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 60px;
+    margin-bottom: 16px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #DBDBDB;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.text {
+    text-align: center;
+}
+
+.text a {
+    text-decoration: none;
+    color: #262626;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.text a:hover {
+    text-decoration: underline;
+}
+
+.imgWrap {
+    width: 380px;
+    height: 581px;
+    margin-right: 32px;
+    margin-top: -7px;
+}
+
+.imgWrap img {
+    width: 100%;
+    height: 100%;
+}

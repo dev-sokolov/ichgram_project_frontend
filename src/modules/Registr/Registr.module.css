@@ -1,0 +1,41 @@
+.container {
+    margin-top: 81px;
+    display: flex;
+    justify-content: center;
+}
+
+.wrappForm {
+    padding: 26px 40px;
+    border-radius: 3px;
+    border: 1px solid #DBDBDB;
+    border-width: 1px;
+    margin-bottom: 15px;
+}
+
+.logo {
+    width: 268px;
+}
+
+.img {
+    display: flex;
+    justify-content: center;
+}
+
+.wrappInfo {
+    font-size: 14px;
+    color: #000000;
+    padding: 26px 0;
+    border-radius: 3px;
+    border: 1px solid #DBDBDB;
+    border-width: 1px;
+    text-align: center;
+}
+
+.wrappInfo p a {
+    text-decoration: none;
+    color: #0095F6;
+}
+
+.wrappInfo p a:hover {
+    text-decoration: underline;
+}

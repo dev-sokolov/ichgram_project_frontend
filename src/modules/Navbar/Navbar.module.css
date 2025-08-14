@@ -1,0 +1,65 @@
+.wrap {
+    width: 245px;
+    border-right: 1px solid #DBDBDB;
+    padding: 28px 79px 0 24px;
+}
+
+.navLogo {
+    width: 97px;
+    height: 55px;
+    margin-bottom: 33px;
+}
+
+.navLogo img {
+    width: 100%;
+    height: 100%;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+}
+
+.elem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 29px;
+}
+
+.iconWrap {
+    width: 24px;
+    height: 24px;
+}
+
+.iconWrap img {
+    width: 100%;
+    height: 100%;
+}
+
+.item {
+    font-size: 16px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.item:global(.active) {
+    font-weight: 700;
+}
+
+.item:hover {
+    text-decoration: underline;
+}
+
+.img {
+    width: 24px;
+    height: 24px;
+}
+
+.img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}

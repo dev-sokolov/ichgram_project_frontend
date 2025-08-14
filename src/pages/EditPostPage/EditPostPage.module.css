@@ -1,0 +1,103 @@
+.editWrapper {
+    width: 610px;
+    margin-top: 48px;
+    margin-left: 167px;
+}
+
+.heading {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 44px;
+}
+
+.editFoto {
+    background-color: #EFEFEF;
+    border-radius: 20px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 33px;
+}
+
+.editImage {
+    background-color: #EFEFEF;
+    border-radius: 20px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 33px;
+}
+
+.postImg {
+    margin-right: 16px;
+    width: 256px;
+    height: 156px;
+    background-color: #EFEFEF;
+}
+
+.postImg img {
+    width: 100%;
+    height: 100%;
+    /* object-fit: cover;
+    border-radius: 50%; */
+    display: block;
+}
+
+.editFotoData {
+    width: 265px;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.descr {
+    font-size: 14px;
+    color: #737373;
+}
+
+.newFotoBtn {
+    width: 114px;
+    margin-left: auto;
+}
+
+.editUsername input,
+.editWebsite input {
+    padding: 12px 0 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #DBDBDB;
+    margin-bottom: 21px;
+    width: 100%;
+    font-size: 14px;
+}
+
+.editAbout textarea {
+    padding: 12px 0 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #DBDBDB;
+    margin-bottom: 21px;
+    width: 100%;
+    font-size: 14px;
+    resize: none;
+}
+
+input.inputWebsite::placeholder {
+    color: #4b92d3;
+    font-weight: 600;
+}
+
+input.inputWebsite {
+    color: #00376B;
+    font-weight: 600;
+}
+
+.btn {
+    margin-top: 46px;
+    width: 268px;
+}
+
+.textarea {
+    color: #777;
+}

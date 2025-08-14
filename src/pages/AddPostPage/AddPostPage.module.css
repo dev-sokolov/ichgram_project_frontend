@@ -1,0 +1,29 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.wrap {
+    margin-left: 125px;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.backgroundSection {
+    margin-top: 197px;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 2;
+    pointer-events: none;
+    margin-left: -125px;
+    min-height: 100vh;
+}
+
