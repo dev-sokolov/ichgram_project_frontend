@@ -22,7 +22,7 @@ import ChatRooms from "../../modules/ChatRooms/ChatRooms";
 import avatar from "../../assets/img/postAvatar.jpg";
 import styles from "./MessagesPage.module.css";
 
-const socket = io(import.meta.env.VITE_SOCKET_URL, {
+const socket = io(import.meta.env.VITE_WEBSOCKET_URL, {
     auth: { token: localStorage.getItem("token") }
 });
 

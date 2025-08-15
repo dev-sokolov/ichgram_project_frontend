@@ -68,7 +68,7 @@ const Login = () => {
                             {loading && <p>Loading...</p>}
                             {error && <p style={{ color: "red" }}>{error}</p>}
 
-                            {!successVerify && !error && <p style={{ textAlign: "center"}}>First of all, verify your email !</p>}
+                            {!successVerify && !error && <p style={{ textAlign: "center"}}></p>}
                             {successVerify && !error && <p style={{ color: "green", textAlign: "center" }}>Email successfully verified</p>}
                             <div className={styles.logo}>
                                 <div className={styles.img}>
