@@ -1,5 +1,6 @@
 .formStyle {
     width: 268px;
+    max-width: 100%;
 }
 
 .inputBlock {
@@ -17,5 +18,5 @@
     color: #737373;
     border-color: #DBDBDB;
     background-color: #FAFAFA;
+    width: 100%;
 }
-

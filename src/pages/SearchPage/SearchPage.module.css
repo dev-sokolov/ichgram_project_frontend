@@ -32,8 +32,8 @@
     background-color: #FFFFFF;
     height: 100%;
     width: 397px;
+    max-width: 100%;
     min-height: 100vh;
-
     overflow-y: auto;
 }
 
@@ -75,6 +75,7 @@
     width: 44px;
     height: 44px;
     margin-right: 18px;
+    flex-shrink: 0;
 }
 
 .avatar img {
@@ -88,4 +89,30 @@
 .username {
     font-size: 14px;
     font-weight: 600;
+}
+
+@media (max-width: 767px) {
+    .wrapper {
+        margin-top: 0;
+    }
+
+    .overlay {
+        display: none;
+    }
+
+    .frontSection {
+        position: relative;
+        width: 100%;
+        border-radius: 0;
+        min-height: calc(100vh - 56px);
+        padding: 16px;
+    }
+
+    .input {
+        margin: 16px 0 24px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
 }

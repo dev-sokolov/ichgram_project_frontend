@@ -1,5 +1,6 @@
 .editWrapper {
     width: 610px;
+    max-width: 100%;
     margin-top: 48px;
     margin-left: 167px;
 }
@@ -17,13 +18,16 @@
     display: flex;
     align-items: center;
     margin-bottom: 33px;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .avatar {
-    margin-right: 16px;
+    margin-right: 0;
     width: 56px;
     height: 56px;
     background-color: #EFEFEF;
+    flex-shrink: 0;
 }
 
 .avatar img {
@@ -36,6 +40,9 @@
 
 .editFotoData {
     width: 265px;
+    max-width: 100%;
+    flex: 1;
+    min-width: 0;
 }
 
 .title {
@@ -87,8 +94,39 @@ input.inputWebsite {
 .btn {
     margin-top: 46px;
     width: 268px;
+    max-width: 100%;
 }
 
 .textarea {
     color: #777;
+}
+
+@media (max-width: 1024px) {
+    .editWrapper {
+        margin-left: 0;
+        margin-top: 32px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .heading {
+        margin-bottom: 24px;
+        font-size: 18px;
+    }
+
+    .editFoto {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .newFotoBtn {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 24px;
+    }
 }

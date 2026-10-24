@@ -40,7 +40,7 @@ const Navbar = () => {
                     <div className={styles.iconWrap}>
                         <NavLink to={"/profile-my"} className={styles.img} > <img src={user?.avatar ? user?.avatar : avatar} alt="avatar" />  </NavLink>
                     </div>
-                    <div><NavLink to={"/profile-my"} className={styles.item}>Profile</NavLink></div>
+                    <div className={styles.label}><NavLink to={"/profile-my"} className={styles.item}>Profile</NavLink></div>
                 </div>
             </div>
         </>

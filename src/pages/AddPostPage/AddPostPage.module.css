@@ -27,3 +27,16 @@
     min-height: 100vh;
 }
 
+@media (max-width: 1024px) {
+    .wrap {
+        margin-left: 0;
+    }
+
+    .overlay {
+        margin-left: 0;
+    }
+
+    .backgroundSection {
+        display: none;
+    }
+}

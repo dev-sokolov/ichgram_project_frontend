@@ -2,18 +2,23 @@
     margin-top: 81px;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    padding: 0 16px 40px;
 }
 
 .wrappForm {
     padding: 26px 40px;
     border-radius: 3px;
     border: 1px solid #DBDBDB;
-    border-width: 1px;
     margin-bottom: 10px;
+    width: 100%;
+    max-width: 350px;
 }
 
 .logo {
     width: 268px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .img {
@@ -27,8 +32,8 @@
     padding: 26px 0;
     border-radius: 3px;
     border: 1px solid #DBDBDB;
-    border-width: 1px;
     text-align: center;
+    max-width: 350px;
 }
 
 .wrappInfo p a {
@@ -91,12 +96,34 @@
 
 .imgWrap {
     width: 380px;
+    max-width: 40vw;
     height: 581px;
+    max-height: 70vh;
     margin-right: 32px;
     margin-top: -7px;
+    flex-shrink: 0;
 }
 
 .imgWrap img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+}
+
+@media (max-width: 900px) {
+    .imgWrap {
+        display: none;
+    }
+
+    .container {
+        margin-top: 40px;
+    }
+
+    .wrappForm {
+        padding: 24px 20px;
+    }
+
+    .divider {
+        margin-bottom: 40px;
+    }
 }

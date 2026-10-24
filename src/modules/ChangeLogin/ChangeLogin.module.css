@@ -2,22 +2,24 @@
     margin-top: 81px;
     display: flex;
     justify-content: center;
+    padding: 0 16px 40px;
 }
 
 .wrappForm {
     padding: 25px 45px 84px;
     border-radius: 3px;
     border: 1px solid #DBDBDB;
-    border-width: 1px;
+    width: 100%;
+    max-width: 400px;
 }
 
 .titleBlock {
     width: 300px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;      
-
+    gap: 14px;
 }
 
 .title {
@@ -46,8 +48,9 @@
     border-radius: 3px;
     border: 1px solid #DBDBDB;
     background-color: #FAFAFA;
-    border-width: 1px;
     text-align: center;
+    max-width: 400px;
+    margin-top: 10px;
 }
 
 .wrappInfo p a {
@@ -111,12 +114,36 @@
 
 .imgWrap {
     width: 380px;
+    max-width: 40vw;
     height: 581px;
+    max-height: 70vh;
     margin-right: 32px;
     margin-top: -7px;
+    flex-shrink: 0;
 }
 
 .imgWrap img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+}
+
+@media (max-width: 900px) {
+    .imgWrap {
+        display: none;
+    }
+
+    .container {
+        margin-top: 40px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .wrappForm {
+        padding: 24px 20px 40px;
+    }
+
+    .divider {
+        margin-top: 32px;
+    }
 }

@@ -16,6 +16,7 @@
 .iconWrap {
     width: 24px;
     height: 24px;
+    flex-shrink: 0;
 }
 
 .item {
@@ -38,4 +39,52 @@
 
 .activeItem {
     font-weight: 700;
+}
+
+.label {
+    display: inline;
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    .navMenu {
+        margin-bottom: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .elem {
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 24px;
+    }
+
+    .label,
+    .item {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .navMenu {
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        flex: 1;
+        height: 100%;
+    }
+
+    .elem {
+        margin-bottom: 0;
+        gap: 0;
+        justify-content: center;
+    }
+
+    .label,
+    .item {
+        display: none;
+    }
 }

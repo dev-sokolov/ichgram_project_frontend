@@ -42,6 +42,7 @@
     color: #00376B;
     display: flex;
     gap: 7px;
+    word-break: break-word;
 }
 
 .heading {
@@ -49,11 +50,13 @@
     align-items: center;
     gap: 20px;
     margin-bottom: 28px;
+    flex-wrap: wrap;
 }
 
 .btn {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .username {
@@ -80,4 +83,63 @@
 
 .btnLogout {
     width: 169px;
+}
+
+@media (max-width: 1024px) {
+    .wpapHead {
+        gap: 40px;
+    }
+
+    .generalDaten {
+        width: 100%;
+        gap: 24px;
+    }
+
+    .descr {
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .wpapHead {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 24px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 96px;
+        height: 96px;
+    }
+
+    .heading {
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 16px;
+        gap: 12px;
+    }
+
+    .btn {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .btnEdit,
+    .btnLogout {
+        width: 140px;
+    }
+
+    .generalDaten {
+        justify-content: center;
+        gap: 24px;
+        font-size: 14px;
+    }
+
+    .descr,
+    .link {
+        width: 100%;
+        justify-content: center;
+    }
 }

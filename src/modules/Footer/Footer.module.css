@@ -5,11 +5,14 @@
     gap: 48px;
     margin: 24px 0 61px;
     max-width: 1440px;
+    padding: 0 16px;
 }
 
 .menu {
     display: flex;
     gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .menu p a {
@@ -20,4 +23,15 @@
 
 .menu p a:hover {
     text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+    .wrap {
+        gap: 24px;
+        margin: 16px 0 24px;
+    }
+
+    .menu {
+        gap: 16px 24px;
+    }
 }

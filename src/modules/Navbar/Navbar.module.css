@@ -1,7 +1,8 @@
 .wrap {
     width: 245px;
+    flex-shrink: 0;
     border-right: 1px solid #DBDBDB;
-    padding: 28px 79px 0 24px;
+    padding: 28px 40px 0 24px;
 }
 
 .navLogo {
@@ -13,6 +14,7 @@
 .navLogo img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
 }
 
 .icon {
@@ -30,6 +32,7 @@
 .iconWrap {
     width: 24px;
     height: 24px;
+    flex-shrink: 0;
 }
 
 .iconWrap img {
@@ -62,4 +65,72 @@
     object-fit: cover;
     border-radius: 50%;
     display: block;
+}
+
+.label {
+    display: inline;
+}
+
+/* Tablet: icon-only sidebar */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .wrap {
+        width: 72px;
+        padding: 28px 12px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navLogo {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 24px;
+    }
+
+    .elem {
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 24px;
+    }
+
+    .label,
+    .item {
+        display: none;
+    }
+}
+
+/* Mobile: bottom navigation */
+@media (max-width: 767px) {
+    .wrap {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 56px;
+        padding: 0 8px;
+        border-right: none;
+        border-top: 1px solid #DBDBDB;
+        background-color: #ffffff;
+        z-index: 100;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .navLogo {
+        display: none;
+    }
+
+    .elem {
+        margin-bottom: 0;
+        gap: 0;
+        justify-content: center;
+    }
+
+    .label,
+    .item {
+        display: none;
+    }
 }

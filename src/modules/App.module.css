@@ -7,12 +7,28 @@
 .app {
   display: flex;
   flex: 1;
+  min-width: 0;
 }
 
 .main {
   flex: 1;
+  min-width: 0;
 }
 
 .footer {
-  margin-top: auto; 
+  margin-top: auto;
+}
+
+@media (max-width: 767px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .main {
+    padding-bottom: 64px;
+  }
+
+  .footer {
+    margin-bottom: 56px;
+  }
 }

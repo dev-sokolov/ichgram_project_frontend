@@ -2,5 +2,18 @@
     max-width: 1195px;
     margin: 0 auto;
     height: 100%;
+    width: 100%;
+    padding: 0 16px;
 }
 
+@media (min-width: 768px) {
+    .containerStyle {
+        padding: 0 24px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .containerStyle {
+        padding: 0;
+    }
+}

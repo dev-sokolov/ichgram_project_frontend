@@ -2,11 +2,20 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     font-family: "Roboto", sans-serif;
-    max-width: 1440px;
-    margin: 0 auto;
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+}
+
+img,
+video {
+    max-width: 100%;
+}
+
+#root {
+    min-height: 100%;
 }
