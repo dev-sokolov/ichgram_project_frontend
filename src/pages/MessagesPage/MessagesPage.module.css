@@ -4,6 +4,10 @@
     min-height: calc(100vh - 80px);
 }
 
+.roomsPanel {
+    display: contents;
+}
+
 .chatBox {
     flex: 1;
     min-width: 0;
@@ -15,6 +19,17 @@
     align-items: center;
     border-bottom: 1px solid #DBDBDB;
     width: 100%;
+}
+
+.backBtn {
+    display: none;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    line-height: 1;
+    padding: 8px 4px 8px 12px;
+    cursor: pointer;
+    color: #262626;
 }
 
 .avatarHead {
@@ -191,6 +206,10 @@
     word-break: break-word;
 }
 
+.emptyChat {
+    padding: 20px;
+}
+
 @media (max-width: 1024px) {
     .userInfo {
         margin: 40px auto 60px;
@@ -205,11 +224,37 @@
 @media (max-width: 767px) {
     .chatWrap {
         flex-direction: column;
-        min-height: auto;
+        min-height: calc(100vh - 56px - 80px);
+    }
+
+    .roomsPanel {
+        display: block;
+        width: 100%;
+    }
+
+    .chatWrap.listView .chatBox {
+        display: none;
+    }
+
+    .chatWrap.chatView .roomsPanel {
+        display: none;
     }
 
     .chatBox {
-        border-top: 1px solid #DBDBDB;
+        border-top: none;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 56px - 80px);
+    }
+
+    .backBtn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .avatarHead {
+        margin-left: 4px;
     }
 
     .userInfo {
@@ -228,5 +273,9 @@
     .button {
         width: calc(100% - 36px);
         padding: 10px 16px;
+    }
+
+    .emptyChat {
+        display: none;
     }
 }

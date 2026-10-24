@@ -83,12 +83,28 @@
     .chatRoomsWrap {
         width: 100%;
         border-right: none;
-        border-bottom: 1px solid #DBDBDB;
-        max-height: 240px;
+        border-bottom: none;
+        max-height: none;
+        min-height: calc(100vh - 56px - 80px);
     }
 
     .chatRoomsHead {
-        padding: 16px 0 16px 16px;
-        font-size: 16px;
+        padding: 16px;
+        font-size: 18px;
+        position: sticky;
+        top: 0;
+        background-color: #ffffff;
+        z-index: 1;
+        border-bottom: 1px solid #DBDBDB;
+    }
+
+    .chatElement {
+        padding: 4px 0;
+    }
+
+    .avatar {
+        margin-left: 16px;
+        width: 52px;
+        height: 52px;
     }
 }

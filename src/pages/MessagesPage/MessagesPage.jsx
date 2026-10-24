@@ -26,17 +26,69 @@ const socket = io(import.meta.env.VITE_WEBSOCKET_URL, {
     auth: { token: localStorage.getItem("token") }
 });
 
+const MOBILE_MQ = "(max-width: 767px)";
+const getSelectedChatStorageKey = (userId) => `ichgram:selectedChat:${userId}`;
+const getMobileChatOpenStorageKey = (userId) => `ichgram:mobileChatOpen:${userId}`;
+
 const MessagesPage = () => {
     const currentUserId = getPersistedUserIdFromToken();
     const dispatch = useDispatch();
 
-    const { register, reset, handleSubmit, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit } = useForm();
 
     const users = useSelector(getAllUsersSelector);
     const currentUser = useSelector(getCurrentUserSelector);
     const { conversations } = useSelector(getConversationByUserIdSelector);
 
-    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [isMobile, setIsMobile] = useState(() =>
+        typeof window !== "undefined" ? window.matchMedia(MOBILE_MQ).matches : false
+    );
+
+    const [selectedUserId, setSelectedUserId] = useState(() => {
+        if (!currentUserId) return null;
+        return sessionStorage.getItem(getSelectedChatStorageKey(currentUserId));
+    });
+
+    const [mobileShowChat, setMobileShowChat] = useState(() => {
+        if (!currentUserId || typeof window === "undefined") return false;
+        if (!window.matchMedia(MOBILE_MQ).matches) return false;
+        const savedUserId = sessionStorage.getItem(getSelectedChatStorageKey(currentUserId));
+        const chatWasOpen = sessionStorage.getItem(getMobileChatOpenStorageKey(currentUserId)) === "1";
+        return Boolean(savedUserId && chatWasOpen);
+    });
+
+    const handleSelectUser = (userId) => {
+        setSelectedUserId(userId);
+        if (currentUserId && userId) {
+            sessionStorage.setItem(getSelectedChatStorageKey(currentUserId), userId);
+        }
+        if (window.matchMedia(MOBILE_MQ).matches) {
+            setMobileShowChat(true);
+            if (currentUserId) {
+                sessionStorage.setItem(getMobileChatOpenStorageKey(currentUserId), "1");
+            }
+        }
+    };
+
+    const handleBackToList = () => {
+        setMobileShowChat(false);
+        if (currentUserId) {
+            sessionStorage.setItem(getMobileChatOpenStorageKey(currentUserId), "0");
+        }
+    };
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia(MOBILE_MQ);
+        const onChange = (event) => {
+            setIsMobile(event.matches);
+            if (!event.matches) {
+                setMobileShowChat(false);
+            }
+        };
+
+        mediaQuery.addEventListener("change", onChange);
+        return () => mediaQuery.removeEventListener("change", onChange);
+    }, []);
 
     useEffect(() => {
         socket.on("connect", () => {
@@ -58,7 +110,6 @@ const MessagesPage = () => {
         };
     }, [currentUserId, dispatch]);
 
-
     useEffect(() => {
         dispatch(getAllUsers());
     }, [dispatch]);
@@ -74,13 +125,49 @@ const MessagesPage = () => {
     }, [selectedUserId, dispatch]);
 
     useEffect(() => {
-        if (users.length > 0) {
-            setSelectedUserId(users[0]._id); 
+        if (!users.length || !currentUserId) return;
+
+        const chatUsers = users.filter((user) => user._id !== currentUserId);
+        if (!chatUsers.length) {
+            setSelectedUserId(null);
+            setMobileShowChat(false);
+            sessionStorage.setItem(getMobileChatOpenStorageKey(currentUserId), "0");
+            return;
         }
-    }, [users]);
+
+        const storageKey = getSelectedChatStorageKey(currentUserId);
+        const mobileOpenKey = getMobileChatOpenStorageKey(currentUserId);
+        const savedUserId = sessionStorage.getItem(storageKey);
+        const savedUserExists = chatUsers.some((user) => user._id === savedUserId);
+
+        if (savedUserExists) {
+            setSelectedUserId(savedUserId);
+            if (window.matchMedia(MOBILE_MQ).matches && sessionStorage.getItem(mobileOpenKey) === "1") {
+                setMobileShowChat(true);
+            }
+            return;
+        }
+
+        setSelectedUserId((prev) => {
+            if (prev && chatUsers.some((user) => user._id === prev)) {
+                return prev;
+            }
+            setMobileShowChat(false);
+            sessionStorage.setItem(mobileOpenKey, "0");
+            if (window.matchMedia(MOBILE_MQ).matches) {
+                return prev;
+            }
+            const fallbackId = chatUsers[0]._id;
+            sessionStorage.setItem(storageKey, fallbackId);
+            return fallbackId;
+        });
+    }, [users, currentUserId]);
 
     const messages = conversations[selectedUserId] || [];
-    const selectedUser = users?.find(user => user._id === selectedUserId);
+    const selectedUser = users?.find((user) => user._id === selectedUserId);
+    const mobileViewClass = isMobile
+        ? (mobileShowChat ? styles.chatView : styles.listView)
+        : "";
 
     const onSubmit = (data) => {
         if (!selectedUserId) return;
@@ -93,20 +180,30 @@ const MessagesPage = () => {
 
     return (
         <Container>
-            <div className={styles.chatWrap}>
-                <ChatRooms
-                    selectedUserId={selectedUserId}
-                    onSelectUser={setSelectedUserId}
-                    currentUserAvatar={currentUser?.avatar ? currentUser?.avatar : avatar}
-                    currentUserUsername={currentUser?.username ? currentUser?.username : "username"}
-                    currentUserId={currentUserId}
-                />
+            <div className={`${styles.chatWrap} ${mobileViewClass}`}>
+                <div className={styles.roomsPanel}>
+                    <ChatRooms
+                        selectedUserId={selectedUserId}
+                        onSelectUser={handleSelectUser}
+                        currentUserAvatar={currentUser?.avatar ? currentUser?.avatar : avatar}
+                        currentUserUsername={currentUser?.username ? currentUser?.username : "username"}
+                        currentUserId={currentUserId}
+                    />
+                </div>
                 <div className={styles.chatBox}>
                     {!selectedUser ? (
-                        <p style={{ padding: "20px" }}>Выберите пользователя, чтобы увидеть переписку</p>
+                        <p className={styles.emptyChat}>Выберите пользователя, чтобы увидеть переписку</p>
                     ) : (
                         <>
                             <div className={styles.chatHead}>
+                                <button
+                                    type="button"
+                                    className={styles.backBtn}
+                                    onClick={handleBackToList}
+                                    aria-label="Back to contacts"
+                                >
+                                    ←
+                                </button>
                                 <div className={styles.avatarHead}>
                                     <img src={selectedUser?.avatar ? selectedUser?.avatar : avatar} alt="avatar" />
                                 </div>
