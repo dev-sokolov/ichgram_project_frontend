@@ -6,6 +6,7 @@ import { selectAuth } from "../../../redux/auth/auth-selectors";
 
 import Error from "../../../shared/components/Error/Error";
 import Button from "../../../shared/components/Button/Button";
+import PasswordInput from "../../../shared/components/PasswordInput/PasswordInput";
 
 import registrSchema from "./RegistrSchema";
 
@@ -34,7 +35,7 @@ const RegistrForm = ({ submitForm }) => {
                     <input {...formRegister("username")} className={styles.inputStyle} type="text" placeholder="Username" />
                     {errors.username && <Error>{errors.username.message} </Error>}
                     {!errors.username && error === `This username is already taken.` ? <Error>{error}</Error> : null}
-                    <input {...formRegister("password")} className={styles.inputStyle} type="password" placeholder="Password" />
+                    <PasswordInput {...formRegister("password")} placeholder="Password" />
                     {errors.password && <Error>{errors.password.message} </Error>}
                 </div>
                 <div className={styles.descriptionBlock}>

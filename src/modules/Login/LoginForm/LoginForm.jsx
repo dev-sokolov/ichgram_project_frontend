@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import Button from "../../../shared/components/Button/Button";
 import Error from "../../../shared/components/Error/Error.jsx";
+import PasswordInput from "../../../shared/components/PasswordInput/PasswordInput";
 
 import loginSchema from "./LoginSchema.js";
 
@@ -28,7 +29,7 @@ const LoginForm = ({ submitForm }) => {
                     <input {...register("email")} className={styles.inputStyle} type="email" placeholder="Email" />
                     {errors.email && <Error>{errors.email.message} </Error>}
                     {!errors.email && error ===`User not found` ? <Error>{error}</Error> : null}
-                    <input {...register("password")} className={styles.inputStyle} type="password" placeholder="Password" />
+                    <PasswordInput {...register("password")} placeholder="Password" />
                     {errors.password && <Error>{errors.password.message} </Error>}
                     {!errors.password && error === "Password invalid" ? <Error>{error}</Error> : null}
                 </div>
