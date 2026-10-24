@@ -1,16 +1,28 @@
 .chatWrap {
     display: flex;
     width: 100%;
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px);
+    overflow: hidden;
+    align-items: stretch;
 }
 
 .roomsPanel {
-    display: contents;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100%;
+    min-height: 0;
 }
 
 .chatBox {
     flex: 1;
     min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .chatHead {
@@ -19,6 +31,7 @@
     align-items: center;
     border-bottom: 1px solid #DBDBDB;
     width: 100%;
+    flex-shrink: 0;
 }
 
 .backBtn {
@@ -68,6 +81,17 @@
 .chatContent {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.newMessage {
+    flex-shrink: 0;
+    border-top: 1px solid #DBDBDB;
+    background-color: #ffffff;
+    padding: 12px 0 16px;
 }
 
 .userInfo {
@@ -149,7 +173,7 @@
 }
 
 .button {
-    margin: 30px 18px;
+    margin: 12px 18px 0;
     background-color: antiquewhite;
     cursor: pointer;
     transition: 0.4s;
@@ -224,27 +248,69 @@
 @media (max-width: 767px) {
     .chatWrap {
         flex-direction: column;
-        min-height: calc(100dvh - 56px);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 56px;
+        height: auto;
+        min-height: 0;
+        overflow: hidden;
+        background-color: #ffffff;
+        z-index: 5;
     }
 
     .roomsPanel {
         display: block;
         width: 100%;
+        height: 100%;
+        min-height: 0;
     }
 
     .chatWrap.listView .chatBox {
         display: none;
     }
 
+    /* Keep contacts list mounted under the chat so its scrollTop is preserved */
     .chatWrap.chatView .roomsPanel {
-        display: none;
+        visibility: hidden;
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+    }
+
+    .chatWrap.chatView .chatBox {
+        position: absolute;
+        inset: 0;
+        z-index: 90;
+        display: flex;
+        flex-direction: column;
+        background-color: #ffffff;
+        overflow: hidden;
+        border-top: none;
+        min-height: 0;
     }
 
     .chatBox {
         border-top: none;
         display: flex;
         flex-direction: column;
-        min-height: calc(100dvh - 56px);
+        min-height: 0;
+        height: 100%;
+    }
+
+    .chatContent {
+        padding-bottom: 8px;
+    }
+
+    .newMessage {
+        padding: 10px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .button {
+        width: calc(100% - 36px);
+        margin: 10px 18px 0;
+        padding: 10px 16px;
     }
 
     .chatHead {
@@ -252,6 +318,7 @@
         top: 0;
         z-index: 20;
         height: 56px;
+        flex-shrink: 0;
         background-color: #ffffff;
         border-bottom: 1px solid #DBDBDB;
     }
@@ -269,10 +336,6 @@
         height: 36px;
     }
 
-    .chatContent {
-        padding-bottom: 24px;
-    }
-
     .userInfo {
         margin: 20px auto 28px;
     }
@@ -288,11 +351,6 @@
 
     .btn {
         margin-bottom: 24px;
-    }
-
-    .button {
-        width: calc(100% - 36px);
-        padding: 10px 16px;
     }
 
     .emptyChat {

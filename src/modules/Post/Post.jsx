@@ -21,6 +21,9 @@ const Post = ({ _id, author, userId, currentUserId, description, image, comments
     const [likesCount, setLikesCount] = useState(initialLikesCount);
 
     const daysAgo = getDaysAgo(createdAt);
+    const isMyPost = String(author?._id) === String(currentUserId);
+    const postPath = isMyPost ? `/post-my/${_id}` : `/post-other/${_id}`;
+    const commentsPath = `${postPath}?focus=comment`;
 
     const onToggleLike = async () => {
         try {
@@ -50,7 +53,7 @@ const Post = ({ _id, author, userId, currentUserId, description, image, comments
                         )}
                     </div>
                 </div>
-                <Link to={`/post-other/${_id}`}>
+                <Link to={postPath}>
                     <div className={styles.postImg}><img src={image} alt="postImg" /></div>
                 </Link>
                 <div className={styles.deskr}>
@@ -60,11 +63,15 @@ const Post = ({ _id, author, userId, currentUserId, description, image, comments
                                 <div className={styles.heart}>{liked ? <img src={heart} alt="heart" /> : <Notification />}    </div>
                             </button>
                         </div>
-                        <div className={styles.icon}>< Message /></div>
+                        <Link to={commentsPath} className={styles.icon} aria-label="View comments">
+                            <Message />
+                        </Link>
                     </div>
                     <div className={styles.likesAmount}>{likesCount} like{likesCount !== 1 ? "s" : ""}</div>
                     <div className={styles.text}>{description} <span>more</span> </div>
-                    <div className={styles.comments}>View all comments {commentsCount}</div>
+                    <Link to={commentsPath} className={styles.comments}>
+                        View all comments {commentsCount}
+                    </Link>
                 </div>
             </div>
         </>

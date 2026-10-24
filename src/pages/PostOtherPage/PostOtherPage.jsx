@@ -8,7 +8,7 @@ import { getFollowing } from "../../redux/follows/follows-thunks";
 
 import getPersistedUserIdFromToken from "../../shared/utils/getUserIdFromToken";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import PostContent from "../../modules/PostContent/PostContent";
@@ -53,6 +53,18 @@ const PostOtherPage = () => {
             dispatch(getOnePostById(id))
         }
     }, [dispatch, id])
+
+    useLayoutEffect(() => {
+        const previous = window.history.scrollRestoration;
+        window.history.scrollRestoration = "manual";
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
+        return () => {
+            window.history.scrollRestoration = previous || "auto";
+        };
+    }, [id])
 
     const handleFollowToggle = async () => {
         if (!authorId) return;

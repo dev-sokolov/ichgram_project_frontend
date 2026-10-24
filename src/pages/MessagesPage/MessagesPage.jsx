@@ -15,7 +15,7 @@ import { addMessage } from "../../redux/messages/messages-thunks";
 
 import { getConversationByUserIdSelector } from "../../redux/messages/messages-selectors";
 import getPersistedUserIdFromToken from "../../shared/utils/getUserIdFromToken";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import ChatRooms from "../../modules/ChatRooms/ChatRooms";
@@ -29,6 +29,7 @@ const socket = io(import.meta.env.VITE_WEBSOCKET_URL, {
 const MOBILE_MQ = "(max-width: 767px)";
 const getSelectedChatStorageKey = (userId) => `ichgram:selectedChat:${userId}`;
 const getMobileChatOpenStorageKey = (userId) => `ichgram:mobileChatOpen:${userId}`;
+const getContactsScrollStorageKey = (userId) => `ichgram:contactsListScroll:${userId}`;
 
 const MessagesPage = () => {
     const currentUserId = getPersistedUserIdFromToken();
@@ -57,33 +58,90 @@ const MessagesPage = () => {
         return Boolean(savedUserId && chatWasOpen);
     });
 
+    const chatBoxRef = useRef(null);
+    const chatContentRef = useRef(null);
+    const messagesEndRef = useRef(null);
+    const composerRef = useRef(null);
+    const contactsListRef = useRef(null);
+    const selectedUserIdRef = useRef(selectedUserId);
+    const shouldFocusContactOnListRef = useRef(false);
+
+    useEffect(() => {
+        selectedUserIdRef.current = selectedUserId;
+    }, [selectedUserId]);
+
+    const saveContactsScroll = useCallback(() => {
+        if (!currentUserId) return;
+        const listEl = contactsListRef.current;
+        if (!listEl) return;
+        sessionStorage.setItem(getContactsScrollStorageKey(currentUserId), String(listEl.scrollTop));
+    }, [currentUserId]);
+
+    const applyContactsScroll = useCallback((scrollTop) => {
+        const listEl = contactsListRef.current;
+        if (!listEl || !Number.isFinite(scrollTop) || scrollTop < 0) return false;
+        listEl.scrollTop = scrollTop;
+        return Math.abs(listEl.scrollTop - scrollTop) < 2 || listEl.scrollTop > 0;
+    }, []);
+
+    const restoreContactsScroll = useCallback((options = {}) => {
+        if (!currentUserId) return;
+        const savedScroll = Number(sessionStorage.getItem(getContactsScrollStorageKey(currentUserId)));
+        if (!Number.isFinite(savedScroll) || savedScroll < 0) return;
+
+        const apply = () => {
+            applyContactsScroll(savedScroll);
+            if (options.focusUserId) {
+                const contactEl = contactsListRef.current?.querySelector(
+                    `[data-chat-user-id="${options.focusUserId}"]`
+                );
+                contactEl?.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
+            }
+        };
+
+        apply();
+        requestAnimationFrame(apply);
+        setTimeout(apply, 50);
+        setTimeout(apply, 120);
+        setTimeout(apply, 250);
+    }, [currentUserId, applyContactsScroll]);
+
+    const scrollToLatestMessage = useCallback(() => {
+        const chatContent = chatContentRef.current;
+        const chatBox = chatBoxRef.current;
+
+        if (chatContent) {
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+        if (chatBox) {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        messagesEndRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+        composerRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+    }, []);
+
     const handleSelectUser = (userId) => {
         setSelectedUserId(userId);
         if (currentUserId && userId) {
             sessionStorage.setItem(getSelectedChatStorageKey(currentUserId), userId);
         }
         if (window.matchMedia(MOBILE_MQ).matches) {
-            setMobileShowChat(true);
+            saveContactsScroll();
             if (currentUserId) {
                 sessionStorage.setItem(getMobileChatOpenStorageKey(currentUserId), "1");
             }
-            window.scrollTo({ top: 0, behavior: "auto" });
+            setMobileShowChat(true);
         }
     };
 
     const handleBackToList = () => {
-        setMobileShowChat(false);
         if (currentUserId) {
             sessionStorage.setItem(getMobileChatOpenStorageKey(currentUserId), "0");
         }
-        window.scrollTo({ top: 0, behavior: "auto" });
+        shouldFocusContactOnListRef.current = true;
+        setMobileShowChat(false);
     };
-
-    useEffect(() => {
-        if (isMobile && mobileShowChat) {
-            window.scrollTo({ top: 0, behavior: "auto" });
-        }
-    }, [isMobile, mobileShowChat, selectedUserId]);
 
     useEffect(() => {
         const mediaQuery = window.matchMedia(MOBILE_MQ);
@@ -97,6 +155,68 @@ const MessagesPage = () => {
         mediaQuery.addEventListener("change", onChange);
         return () => mediaQuery.removeEventListener("change", onChange);
     }, []);
+
+    useEffect(() => {
+        const previous = window.history.scrollRestoration;
+        window.history.scrollRestoration = "manual";
+        return () => {
+            window.history.scrollRestoration = previous || "auto";
+        };
+    }, []);
+
+    // Persist contacts list scrollTop on the list container itself
+    useEffect(() => {
+        const listEl = contactsListRef.current;
+        if (!listEl || !currentUserId) return undefined;
+
+        let ticking = false;
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                // Don't overwrite while chat covers the list on mobile — scrollTop is already saved
+                if (!(isMobile && mobileShowChat)) {
+                    saveContactsScroll();
+                }
+                ticking = false;
+            });
+        };
+
+        listEl.addEventListener("scroll", onScroll, { passive: true });
+        return () => {
+            if (!(isMobile && mobileShowChat)) {
+                saveContactsScroll();
+            }
+            listEl.removeEventListener("scroll", onScroll);
+        };
+    }, [currentUserId, isMobile, mobileShowChat, users.length, saveContactsScroll]);
+
+    // Restore list scroll after mount / return to Message
+    useLayoutEffect(() => {
+        if (!currentUserId || !users.length) return undefined;
+
+        restoreContactsScroll();
+        return () => {
+            saveContactsScroll();
+        };
+    }, [currentUserId, users.length, restoreContactsScroll, saveContactsScroll]);
+
+    // Prevent page scroll under chat overlay; keep list scrollTop intact
+    useEffect(() => {
+        if (!(isMobile && mobileShowChat)) return undefined;
+
+        const { body } = document;
+        const previousOverflow = body.style.overflow;
+        body.style.overflow = "hidden";
+
+        return () => {
+            body.style.overflow = previousOverflow;
+            if (shouldFocusContactOnListRef.current) {
+                shouldFocusContactOnListRef.current = false;
+                restoreContactsScroll({ focusUserId: selectedUserIdRef.current });
+            }
+        };
+    }, [isMobile, mobileShowChat, restoreContactsScroll]);
 
     useEffect(() => {
         socket.on("connect", () => {
@@ -176,6 +296,25 @@ const MessagesPage = () => {
     const mobileViewClass = isMobile
         ? (mobileShowChat ? styles.chatView : styles.listView)
         : "";
+    const isChatVisible = !isMobile || mobileShowChat;
+
+    useEffect(() => {
+        if (!isChatVisible || !selectedUserId) return undefined;
+
+        const frameId = requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                scrollToLatestMessage();
+            });
+        });
+        const timeouts = [50, 120, 250, 400].map((delay) =>
+            setTimeout(scrollToLatestMessage, delay)
+        );
+
+        return () => {
+            cancelAnimationFrame(frameId);
+            timeouts.forEach(clearTimeout);
+        };
+    }, [isChatVisible, selectedUserId, messages.length, mobileShowChat, scrollToLatestMessage]);
 
     const onSubmit = (data) => {
         if (!selectedUserId) return;
@@ -191,14 +330,14 @@ const MessagesPage = () => {
             <div className={`${styles.chatWrap} ${mobileViewClass}`}>
                 <div className={styles.roomsPanel}>
                     <ChatRooms
+                        ref={contactsListRef}
                         selectedUserId={selectedUserId}
                         onSelectUser={handleSelectUser}
-                        currentUserAvatar={currentUser?.avatar ? currentUser?.avatar : avatar}
                         currentUserUsername={currentUser?.username ? currentUser?.username : "username"}
                         currentUserId={currentUserId}
                     />
                 </div>
-                <div className={styles.chatBox}>
+                <div className={styles.chatBox} ref={chatBoxRef}>
                     {!selectedUser ? (
                         <p className={styles.emptyChat}>Выберите пользователя, чтобы увидеть переписку</p>
                     ) : (
@@ -217,7 +356,7 @@ const MessagesPage = () => {
                                 </div>
                                 <div className={styles.usernameHead}>{selectedUser.username}</div>
                             </div>
-                            <div className={styles.chatContent}>
+                            <div className={styles.chatContent} ref={chatContentRef}>
                                 <div className={styles.userInfo}>
                                     <div className={styles.avatarMain}>
                                         <img src={selectedUser?.avatar ? selectedUser?.avatar : avatar} alt="avatar" />
@@ -260,15 +399,16 @@ const MessagesPage = () => {
                                             </div>
                                         );
                                     })}
+                                    <div ref={messagesEndRef} />
                                 </div>
-                                <div className={styles.newMessage}>
-                                    <form onSubmit={handleSubmit(onSubmit)}>
-                                        <div className={styles.input}>
-                                            <input {...register("message", { required: true })} type="text" placeholder="Write message" />
-                                        </div>
-                                        <button className={styles.button} type="submit">Send</button>
-                                    </form>
-                                </div>
+                            </div>
+                            <div className={styles.newMessage} ref={composerRef}>
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <div className={styles.input}>
+                                        <input {...register("message", { required: true })} type="text" placeholder="Write message" />
+                                    </div>
+                                    <button className={styles.button} type="submit">Send</button>
+                                </form>
                             </div>
                         </>
                     )}

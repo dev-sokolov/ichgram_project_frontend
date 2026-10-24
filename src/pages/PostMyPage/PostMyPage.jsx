@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllPostsSelector } from "../../redux/posts/posts-selectors";
 import { getOnePostById } from "../../redux/posts/posts-thunks";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 import { useParams, Link } from "react-router-dom";
 
@@ -26,6 +26,18 @@ const PostMyPage = () => {
             dispatch(getOnePostById(id))
         }
     }, [dispatch, id])
+
+    useLayoutEffect(() => {
+        const previous = window.history.scrollRestoration;
+        window.history.scrollRestoration = "manual";
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
+        return () => {
+            window.history.scrollRestoration = previous || "auto";
+        };
+    }, [id])
 
     return (
         <>

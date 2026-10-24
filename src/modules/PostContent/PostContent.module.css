@@ -17,11 +17,32 @@
 }
 
 .infoBlockImg {
-    width: 20px;
-    height: 20px;
     display: flex;
+    align-items: center;
     gap: 14px;
     margin-bottom: 14px;
+}
+
+.likeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    line-height: 0;
+}
+
+.heartImg {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.img {
+    display: flex;
+    align-items: center;
 }
 
 .likesAmount {
@@ -135,5 +156,6 @@
         height: auto;
         max-height: none;
         min-height: 280px;
+        background-color: #ffffff;
     }
 }

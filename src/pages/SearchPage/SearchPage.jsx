@@ -41,12 +41,21 @@ const SearchPage = () => {
     }
 
     const element = usersArray.map(user => (
-        <div className={styles.item} key={user._id}>
-            <Link to={`/profile-other/${user._id}`}>
-                <div className={styles.avatar}> <img src={user?.avatar ? user?.avatar : avatar} alt="avatar" /> </div>
-            </Link>
-            <p className={styles.username}> {user.username} </p>
-        </div>
+        <Link
+            key={user._id}
+            to={`/profile-other/${user._id}`}
+            className={styles.item}
+            onClick={() => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }}
+        >
+            <div className={styles.avatar}>
+                <img src={user?.avatar ? user?.avatar : avatar} alt="avatar" />
+            </div>
+            <p className={styles.username}>{user.username}</p>
+        </Link>
     ));
 
     return (
