@@ -67,6 +67,7 @@ const MessagesPage = () => {
             if (currentUserId) {
                 sessionStorage.setItem(getMobileChatOpenStorageKey(currentUserId), "1");
             }
+            window.scrollTo({ top: 0, behavior: "auto" });
         }
     };
 
@@ -75,7 +76,14 @@ const MessagesPage = () => {
         if (currentUserId) {
             sessionStorage.setItem(getMobileChatOpenStorageKey(currentUserId), "0");
         }
+        window.scrollTo({ top: 0, behavior: "auto" });
     };
+
+    useEffect(() => {
+        if (isMobile && mobileShowChat) {
+            window.scrollTo({ top: 0, behavior: "auto" });
+        }
+    }, [isMobile, mobileShowChat, selectedUserId]);
 
     useEffect(() => {
         const mediaQuery = window.matchMedia(MOBILE_MQ);

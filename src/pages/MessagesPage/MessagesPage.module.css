@@ -224,7 +224,7 @@
 @media (max-width: 767px) {
     .chatWrap {
         flex-direction: column;
-        min-height: calc(100vh - 56px - 80px);
+        min-height: calc(100dvh - 56px);
     }
 
     .roomsPanel {
@@ -244,21 +244,37 @@
         border-top: none;
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - 56px - 80px);
+        min-height: calc(100dvh - 56px);
+    }
+
+    .chatHead {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: 56px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #DBDBDB;
     }
 
     .backBtn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
     .avatarHead {
-        margin-left: 4px;
+        margin: 0 10px 0 4px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .chatContent {
+        padding-bottom: 24px;
     }
 
     .userInfo {
-        margin: 24px auto 32px;
+        margin: 20px auto 28px;
     }
 
     .avatarMain {
@@ -268,6 +284,10 @@
 
     .usernameMain {
         font-size: 16px;
+    }
+
+    .btn {
+        margin-bottom: 24px;
     }
 
     .button {
