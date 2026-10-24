@@ -32,7 +32,7 @@ const AddPostForm = ({ submitForm }) => {
         if (data.addPhoto?.[0]) {
             formData.append("image", data.addPhoto[0]);
         }
-        formData.append("description", data.addMessage);
+        formData.append("description", data.addMessage || "");
         submitForm(formData);
     };
 
@@ -96,8 +96,10 @@ const AddPostForm = ({ submitForm }) => {
                                     <div className={styles.avatar}><img src={user?.avatar ?  user?.avatar : avatar} alt="avatar" /> </div>
                                     <p>{user?.username}</p>
                                 </div>
-                                <textarea {...register("addMessage", { required: "Please add a message" })}></textarea>
-                                {errors.addMessage && <Error>{errors.addMessage.message} </Error>}
+                                <textarea
+                                    {...register("addMessage")}
+                                    placeholder="Write a caption..."
+                                ></textarea>
                                 <div className={styles.smile}><PostSmile /></div>
                             </div>
                         </div>
