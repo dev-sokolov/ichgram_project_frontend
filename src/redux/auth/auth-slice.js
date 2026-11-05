@@ -7,6 +7,7 @@ import { pending, rejected } from "../../shared/components/lib/redux";
 const initialState = {
     token: "",
     user: null,
+    isGuest: false,
     loading: false,
     error: null,
     successVerify: false,
@@ -18,6 +19,13 @@ const authSlice = createSlice({
     reducers: {
         clearAuthError: (store) => {
             store.error = null
+        },
+        enterGuest: (store) => {
+            store.token = "";
+            store.user = null;
+            store.isGuest = true;
+            store.loading = false;
+            store.error = null;
         }
     },
     extraReducers: builder => {
@@ -27,6 +35,7 @@ const authSlice = createSlice({
                 store.loading = false;
                 store.token = payload.token;
                 store.user = payload.user;
+                store.isGuest = false;
             })
             .addCase(register.pending, pending)
             .addCase(register.rejected, rejected)
@@ -40,6 +49,7 @@ const authSlice = createSlice({
                 store.loading = false;
                 store.token = payload.token;
                 store.user = payload.user;
+                store.isGuest = false;
             })
             .addCase(logout.pending, pending)
             .addCase(logout.fulfilled, () => initialState)
@@ -51,5 +61,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { clearAuthError } = authSlice.actions;
+export const { clearAuthError, enterGuest } = authSlice.actions;
 export default authSlice.reducer;

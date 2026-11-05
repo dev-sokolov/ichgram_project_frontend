@@ -4,9 +4,10 @@ import { getCurrentUserById } from "../../redux/users/users-thunks";
 import getPersistedUserIdFromToken from "../../shared/utils/getUserIdFromToken";
 
 import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import { logout } from "../../redux/auth/auth-thunks";
+import { selectIsGuest } from "../../redux/auth/auth-selectors";
 
 import NavbarMenu from "./NavbarMenu/NavbarMenu";
 
@@ -17,6 +18,7 @@ import styles from "./Navbar.module.css";
 const Navbar = () => {
     const dispatch = useDispatch();
     const user = useSelector(getCurrentUserSelector);
+    const isGuest = useSelector(selectIsGuest);
     const userId = getPersistedUserIdFromToken();
 
     useEffect(() => {
@@ -36,12 +38,18 @@ const Navbar = () => {
                     <img src={logo} alt="logo" />
                 </div>
                 <NavbarMenu />
-                <div className={styles.elem}>
-                    <div className={styles.iconWrap}>
-                        <NavLink to={"/profile-my"} className={styles.img} > <img src={user?.avatar ? user?.avatar : avatar} alt="avatar" />  </NavLink>
+                {isGuest ? (
+                    <div className={styles.elem}>
+                        <div className={styles.label}><Link to="/" className={styles.item}>Log in</Link></div>
                     </div>
-                    <div className={styles.label}><NavLink to={"/profile-my"} className={styles.item}>Profile</NavLink></div>
-                </div>
+                ) : (
+                    <div className={styles.elem}>
+                        <div className={styles.iconWrap}>
+                            <NavLink to={"/profile-my"} className={styles.img} > <img src={user?.avatar ? user?.avatar : avatar} alt="avatar" />  </NavLink>
+                        </div>
+                        <div className={styles.label}><NavLink to={"/profile-my"} className={styles.item}>Profile</NavLink></div>
+                    </div>
+                )}
             </div>
         </>
     )

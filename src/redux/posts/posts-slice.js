@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { addPost, getAllPosts, getPostsFromUserById, getOnePostById, deletePost, updatePostData } from "./posts-thunks";
+import { toggleLike } from "../likes/likes-thunks";
 
 import { pending, rejected } from "../../shared/components/lib/redux";
 
@@ -11,6 +12,24 @@ const initialState = {
     loading: false,
     error: null,
 }
+
+const applyLikeChange = (post, { postId, userId, liked }) => {
+    if (!post || String(post._id) !== String(postId) || !userId) return;
+
+    const user = String(userId);
+    const likedUserIds = post.likedUserIds || [];
+    const hasLiked = likedUserIds.some((id) => String(id) === user);
+
+    if (liked && !hasLiked) {
+        post.likedUserIds = [...likedUserIds, user];
+        post.likesCount = (post.likesCount || 0) + 1;
+    }
+
+    if (!liked && hasLiked) {
+        post.likedUserIds = likedUserIds.filter((id) => String(id) !== user);
+        post.likesCount = Math.max(0, (post.likesCount || 0) - 1);
+    }
+};
 
 const postsSlice = createSlice({
     name: "posts",
@@ -54,6 +73,11 @@ const postsSlice = createSlice({
             .addCase(updatePostData.fulfilled, (store, { payload }) => {
                 store.loading = false;
                 store.onePost = payload;
+            })
+            .addCase(toggleLike.fulfilled, (store, { payload }) => {
+                store.allPosts.forEach((post) => applyLikeChange(post, payload));
+                store.userPosts.forEach((post) => applyLikeChange(post, payload));
+                applyLikeChange(store.onePost, payload);
             })
     }
 })

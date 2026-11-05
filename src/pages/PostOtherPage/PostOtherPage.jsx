@@ -7,6 +7,7 @@ import { unfollow } from "../../redux/follows/follows-thunks";
 import { getFollowing } from "../../redux/follows/follows-thunks";
 
 import getPersistedUserIdFromToken from "../../shared/utils/getUserIdFromToken";
+import { useAuthPrompt } from "../../shared/components/AuthPrompt/AuthPrompt";
 
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -31,6 +32,7 @@ const PostOtherPage = () => {
 
     const followings = useSelector(getFollowsSelector).followings;
     const currentUserId = getPersistedUserIdFromToken();
+    const { requireAuth } = useAuthPrompt();
 
     useEffect(() => {
         if (currentUserId) {
@@ -67,7 +69,7 @@ const PostOtherPage = () => {
     }, [id])
 
     const handleFollowToggle = async () => {
-        if (!authorId) return;
+        if (!authorId || !requireAuth()) return;
 
         try {
             setFollowError(null);

@@ -6,10 +6,23 @@ import Notification from "../../../assets/icons/Notification";
 import Create from "../../../assets/icons/Create";
 
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { selectIsGuest } from "../../../redux/auth/auth-selectors";
+import { useAuthPrompt } from "../../../shared/components/AuthPrompt/AuthPrompt";
 
 import styles from "./NavbarMenu.module.css"
 
 const NavbarMenu = () => {
+    const isGuest = useSelector(selectIsGuest);
+    const { requireAuth } = useAuthPrompt();
+
+    const guardCreate = (event) => {
+        if (!isGuest) return;
+        event.preventDefault();
+        requireAuth();
+    };
+
     return (
         <>
             <div className={styles.navMenu}>
@@ -34,8 +47,8 @@ const NavbarMenu = () => {
                     <div className={styles.label}><NavLink to={"/notification"} className={styles.item}>Notification</NavLink></div>
                 </div>
                 <div className={styles.elem}>
-                    <div className={styles.iconWrap}><NavLink to="/post-add" end>{({ isActive }) => <Create active={isActive} />}</NavLink></div>
-                    <div className={styles.label}><NavLink to={"/post-add"} className={styles.item}>Create</NavLink></div>
+                    <div className={styles.iconWrap}><NavLink to="/post-add" end onClick={guardCreate}>{({ isActive }) => <Create active={isActive} />}</NavLink></div>
+                    <div className={styles.label}><NavLink to={"/post-add"} className={styles.item} onClick={guardCreate}>Create</NavLink></div>
                 </div>
             </div>
         </>

@@ -22,10 +22,6 @@ import ChatRooms from "../../modules/ChatRooms/ChatRooms";
 import avatar from "../../assets/img/postAvatar.jpg";
 import styles from "./MessagesPage.module.css";
 
-const socket = io(import.meta.env.VITE_WEBSOCKET_URL, {
-    auth: { token: localStorage.getItem("token") }
-});
-
 const MOBILE_MQ = "(max-width: 767px)";
 const getSelectedChatStorageKey = (userId) => `ichgram:selectedChat:${userId}`;
 const getMobileChatOpenStorageKey = (userId) => `ichgram:mobileChatOpen:${userId}`;
@@ -219,22 +215,32 @@ const MessagesPage = () => {
     }, [isMobile, mobileShowChat, restoreContactsScroll]);
 
     useEffect(() => {
-        socket.on("connect", () => {
+        if (!currentUserId) return undefined;
+
+        const token = localStorage.getItem("token");
+        const socket = io(import.meta.env.VITE_WEBSOCKET_URL, {
+            auth: { token },
+        });
+
+        const handleConnect = () => {
             socket.emit("join", currentUserId);
-        });
-
-        socket.on("new_message", (message) => {
+        };
+        const handleNewMessage = (message) => {
             dispatch(addMessageLocal({ ...message, currentUserId }));
-        });
-
-        socket.on("message_sent", (message) => {
+        };
+        const handleMessageSent = (message) => {
             dispatch(addMessageLocal({ ...message, currentUserId }));
-        });
+        };
+
+        socket.on("connect", handleConnect);
+        socket.on("new_message", handleNewMessage);
+        socket.on("message_sent", handleMessageSent);
 
         return () => {
-            socket.off("connect");
-            socket.off("new_message");
-            socket.off("message_sent");
+            socket.off("connect", handleConnect);
+            socket.off("new_message", handleNewMessage);
+            socket.off("message_sent", handleMessageSent);
+            socket.disconnect();
         };
     }, [currentUserId, dispatch]);
 

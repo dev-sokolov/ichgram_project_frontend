@@ -47,6 +47,21 @@
     margin-bottom: 16px;
 }
 
+.guestNote {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #262626;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.guestNote a {
+    color: #0095f6;
+    font-weight: 600;
+    text-decoration: none;
+}
+
 .notification {
     display: flex;
     flex-direction: column;

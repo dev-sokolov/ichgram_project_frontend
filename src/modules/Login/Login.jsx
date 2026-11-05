@@ -8,7 +8,9 @@ import LoginForm from "./LoginForm/LoginForm";
 import { selectAuth } from "../../redux/auth/auth-selectors";
 import { login } from "../../redux/auth/auth-thunks";
 import { verifyUserApi } from "../../shared/api/auth-api";
-import { clearAuthError } from "../../redux/auth/auth-slice";
+import { clearAuthError, enterGuest } from "../../redux/auth/auth-slice";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "../../shared/constants/demoAccount";
+import backendInstance from "../../shared/api/instance";
 
 import { Link } from "react-router-dom";
 
@@ -50,6 +52,17 @@ const Login = () => {
 
     const submitForm = (payload) => dispatch(login(payload));
 
+    const exploreAsGuest = () => {
+        localStorage.removeItem("token");
+        delete backendInstance.defaults.headers["Authorization"];
+        dispatch(enterGuest());
+        navigate("/home");
+    };
+
+    const enterDemo = () => {
+        dispatch(login({ email: DEMO_EMAIL, password: DEMO_PASSWORD }));
+    };
+
     useEffect(() => {
         if (token) {
             navigate("/home")
@@ -77,11 +90,27 @@ const Login = () => {
                             </div>
                             <LoginForm submitForm={submitForm} />
                             <div className={styles.divider}>OR</div>
+                            <div className={styles.access}>
+                                <button type="button" className={styles.guestBtn} onClick={exploreAsGuest}>
+                                    Explore as Guest
+                                </button>
+                                <div className={styles.demoCard}>
+                                    <p className={styles.demoTitle}>Try Demo Account</p>
+                                    <p className={styles.demoText}>
+                                        Each login restores a clean profile, so visitors do not overwrite each other.
+                                    </p>
+                                    <p className={styles.demoCred}><span>Email</span> {DEMO_EMAIL}</p>
+                                    <p className={styles.demoCred}><span>Password</span> {DEMO_PASSWORD}</p>
+                                    <button type="button" className={styles.demoBtn} onClick={enterDemo} disabled={loading}>
+                                        {loading ? "Signing in..." : "Continue as demo"}
+                                    </button>
+                                </div>
+                            </div>
                             {successVerify && "Email successfully verified"}
                             <div className={styles.text}> <Link to={"/changeLogin"}>Forgot password?</Link> </div>
                         </div>
                         <div className={styles.wrappInfo}>
-                            <p>Don't have an account? span <Link to={"/registr"}>Sign up</Link> </p>
+                            <p>Don't have an account? <Link to={"/registr"}>Sign up</Link> </p>
                         </div>
                     </div>
                 </div>

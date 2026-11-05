@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { toggleLike } from "../../redux/likes/likes-thunks";
 import { Link } from "react-router-dom";
+import { useAuthPrompt } from "../../shared/components/AuthPrompt/AuthPrompt";
 
 import Notification from "../../assets/icons/Notification";
 import Message from "../../assets/icons/Message";
@@ -15,10 +16,16 @@ import styles from "./Post.module.css";
 
 const Post = ({ _id, author, userId, currentUserId, description, image, commentsCount, likesCount: initialLikesCount, createdAt, likedUserIds = [], onUnfollow, onFollow, isFollowing }) => {
     const dispatch = useDispatch();
-    const hasLiked = likedUserIds.includes(String(currentUserId));
+    const { requireAuth } = useAuthPrompt();
+    const hasLiked = likedUserIds.some((id) => String(id) === String(currentUserId));
 
     const [liked, setLiked] = useState(hasLiked);
     const [likesCount, setLikesCount] = useState(initialLikesCount);
+
+    useEffect(() => {
+        setLiked(likedUserIds.some((id) => String(id) === String(currentUserId)));
+        setLikesCount(initialLikesCount ?? 0);
+    }, [likedUserIds, initialLikesCount, currentUserId]);
 
     const daysAgo = getDaysAgo(createdAt);
     const isMyPost = String(author?._id) === String(currentUserId);
@@ -26,11 +33,9 @@ const Post = ({ _id, author, userId, currentUserId, description, image, comments
     const commentsPath = `${postPath}?focus=comment`;
 
     const onToggleLike = async () => {
+        if (!requireAuth()) return;
         try {
-            const nextLiked = !liked;
-            await dispatch(toggleLike(_id));
-            setLiked(nextLiked);
-            setLikesCount(prev => nextLiked ? prev + 1 : prev - 1);
+            await dispatch(toggleLike(_id)).unwrap();
         } catch (error) {
             console.error("Failed to like:", error);
         }
@@ -46,9 +51,9 @@ const Post = ({ _id, author, userId, currentUserId, description, image, comments
                         <p className={styles.visit}>&middot; {daysAgo} day{daysAgo !== 1 ? "s" : ""} ago &middot;</p>
                         {currentUserId !== author._id && (
                             isFollowing ? (
-                                <button onClick={() => onUnfollow(author._id)} type="button" className={styles.follow}>Unfollow</button>
+                                <button onClick={() => requireAuth() && onUnfollow(author._id)} type="button" className={styles.follow}>Unfollow</button>
                             ) : (
-                                <button onClick={() => onFollow(author._id)} type="button" className={styles.follow}>Follow</button>
+                                <button onClick={() => requireAuth() && onFollow(author._id)} type="button" className={styles.follow}>Follow</button>
                             )
                         )}
                     </div>

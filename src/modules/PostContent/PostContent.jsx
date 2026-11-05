@@ -20,6 +20,7 @@ import heart from "../../assets/icons/heart.png";
 
 import getDaysAgo from "../../shared/utils/getDaysAgo";
 import getPersistedUserIdFromToken from "../../shared/utils/getUserIdFromToken";
+import { useAuthPrompt } from "../../shared/components/AuthPrompt/AuthPrompt";
 
 import avatar from "../../assets/img/postAvatar.jpg"
 
@@ -35,6 +36,7 @@ const PostContent = ({
     likedUserIds = [],
 }) => {
     const dispatch = useDispatch();
+    const { requireAuth } = useAuthPrompt();
     const currentUserId = getPersistedUserIdFromToken();
     const [searchParams, setSearchParams] = useSearchParams();
     const commentInputRef = useRef(null);
@@ -77,22 +79,21 @@ const PostContent = ({
     }, [searchParams.get("focus")]);
 
     const onToggleLike = async () => {
-        if (!postId) return;
+        if (!postId || !requireAuth()) return;
         try {
-            const nextLiked = !liked;
             await dispatch(toggleLike(postId)).unwrap();
-            setLiked(nextLiked);
-            setLikesCount((prev) => nextLiked ? prev + 1 : Math.max(0, prev - 1));
         } catch (err) {
             console.error("Failed to like:", err);
         }
     };
 
     const onFocusComment = () => {
+        if (!requireAuth()) return;
         commentInputRef.current?.focus({ preventScroll: true });
     };
 
     const onSubmit = (data) => {
+        if (!requireAuth()) return;
         const payload = { text: data.comment };
         dispatch(addComment({ postId, payload }));
         dispatch(getCommentsfromPost(postId));
@@ -170,6 +171,9 @@ const PostContent = ({
                                     }}
                                     type="text"
                                     placeholder="Add comment"
+                                    onFocus={() => {
+                                        if (!requireAuth()) commentInputRef.current?.blur();
+                                    }}
                                 />
                                 {errors.comment && <Error>{errors.comment.message} </Error>}
                                 <button type="submit">Send</button>

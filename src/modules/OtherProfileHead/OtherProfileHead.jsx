@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 import { addFollower, unfollow } from "../../redux/follows/follows-thunks";
 import getPersistedUserIdFromToken from "../../shared/utils/getUserIdFromToken";
+import { useAuthPrompt } from "../../shared/components/AuthPrompt/AuthPrompt";
 
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -18,6 +19,7 @@ import styles from "./OtherProfileHead.module.css";
 const OtherProfileHead = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { requireAuth } = useAuthPrompt();
   const currentUserId = getPersistedUserIdFromToken();
 
   const { authorId } = useParams();
@@ -35,7 +37,7 @@ const OtherProfileHead = () => {
   );
 
   const followAction = async () => {
-    if (!authorId) return;
+    if (!authorId || !requireAuth()) return;
 
     setError(null);
     try {
@@ -52,6 +54,7 @@ const OtherProfileHead = () => {
   };
 
   const addMessage = () => {
+    if (!requireAuth()) return;
     navigate(`/message/${authorId}`)
   }
 

@@ -10,3 +10,8 @@ export const getConversationByUserIdApi = async (userId) => {
     return data;
 };
 
+export const getShowcaseMessagesApi = async () => {
+    const { data } = await backendInstance.get("/messages/showcase");
+    return data;
+};
+

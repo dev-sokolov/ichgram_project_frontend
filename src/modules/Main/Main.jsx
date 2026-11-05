@@ -28,11 +28,13 @@ const Main = () => {
     }, [dispatch])
 
     useEffect(() => {
+        if (!currentUserId) return;
         dispatch(getFollowing(currentUserId))
     }, [dispatch, currentUserId])
 
 
     const onUnfollow = async (authorId) => {
+        if (!currentUserId) return;
         try {
             await dispatch(unfollow(authorId)).unwrap();
             await dispatch(getFollowing(currentUserId)).unwrap();
@@ -42,6 +44,7 @@ const Main = () => {
     };
 
     const onFollow = async (authorId) => {
+        if (!currentUserId) return;
         try {
             await dispatch(addFollower(authorId)).unwrap();
             await dispatch(getFollowing(currentUserId)).unwrap();
@@ -56,23 +59,32 @@ const Main = () => {
         .filter(item => item?.following?._id)
         .map(item => item.following._id);
 
-    let followingsPosts = allPosts.filter(post => followingIds.includes(post?.author?._id));
+    const isGuestFeed = !currentUserId;
+    let postsToShow;
 
-    if (followingsPosts.length === 0) {
-        followingsPosts = [...allPosts] 
-            .sort(() => 0.5 - Math.random()) 
-            .slice(0, 6);
+    if (isGuestFeed) {
+        postsToShow = allPosts.slice(0, visibleCount);
     } else {
-        followingsPosts = followingsPosts.slice(0, visibleCount);
+        let followingsPosts = allPosts.filter(post => followingIds.includes(post?.author?._id));
+
+        if (followingsPosts.length === 0) {
+            followingsPosts = [...allPosts]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 6);
+        } else {
+            followingsPosts = followingsPosts.slice(0, visibleCount);
+        }
+
+        postsToShow = followingsPosts;
     }
 
-    const elements = followingsPosts.map(post => <Post key={post?._id} currentUserId={currentUserId} {...post} onUnfollow={onUnfollow} onFollow={onFollow} isFollowing={followingIds.includes(post?.author?._id)}/>)
+    const elements = postsToShow.map(post => <Post key={post?._id} currentUserId={currentUserId} {...post} onUnfollow={onUnfollow} onFollow={onFollow} isFollowing={followingIds.includes(post?.author?._id)}/>)
 
     return (
         <>
             <div className={styles.wrap}>
-                {followingsPosts.length === 0 ? (
-                    <p className={styles.emptyMessage}>На данный момент Вы ни на кого не подписаны</p>
+                {postsToShow.length === 0 ? (
+                    <p className={styles.emptyMessage}>{isGuestFeed ? "No publications yet" : "На данный момент Вы ни на кого не подписаны"}</p>
                 ) : (
                     <>
                         <div className={styles.posts}>

@@ -2,13 +2,14 @@ import { Route, Routes } from "react-router-dom";
 
 import PublicRoute from "../modules/PublicRoute/PublicRoute";
 import PrivateRoute from "../modules/PrivateRoute/PrivateRoute";
+import BrowseRoute from "../modules/BrowseRoute/BrowseRoute";
 
 import RegistrPage from "./RegistrPage/RegistrPage";
 import LoginPage from "./LoginPage/LoginPage";
 import ChangeLoginPage from "./ChangeLoginPage/ChangeLoginPage";
 import ExplorePage from "./ExplorePage/ExplorePage";
 import HomePage from "./HomePage/HomePage";
-import MessagesPage from "./MessagesPage/MessagesPage";
+import MessagesEntry from "./MessagesPage/MessagesEntry";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 
 import MyProfilePage from "./MyProfilePage/MyProfilePage";
@@ -34,26 +35,23 @@ const Navigation = () => {
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/changeLogin" element={<ChangeLoginPage />} />              
             </Route>
-            <Route element={<PrivateRoute />}>
+            <Route element={<BrowseRoute />}>
                 <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/home" element={<HomePage />} />
-                <Route path="/message" element={<MessagesPage />} />
-                <Route path="/message/:authorId" element={<MessagesPage />} />
+                <Route path="/message" element={<MessagesEntry />} />
+                <Route path="/message/:authorId" element={<MessagesEntry />} />
                 <Route path="/notification" element={<NotificationsPage />} />
-
-                <Route path="/profile-my" element={<MyProfilePage />} />
                 <Route path="/profile-other/:authorId" element={<OtherProfilePage />} />
-
                 <Route path="/post-other/:id" element={<PostOtherPage />} />
+                <Route path="/search" element={<SearchPage />} />
+            </Route>
+            <Route element={<PrivateRoute />}>
+                <Route path="/profile-my" element={<MyProfilePage />} />
                 <Route path="/post-my/:id" element={<PostMyPage />} />
                 <Route path="/post-edit/:id" element={<EditPostPage />} />
-
                 <Route path="/post-add" element={<AddPostPage />} />
                 <Route path="/post-edit-menu/:id" element={<EditPostPageMenu />} />
-
                 <Route path="/profile-edit" element={<EditProfilePage />} />
-
-                <Route path="/search" element={<SearchPage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Route>
         </Routes>
