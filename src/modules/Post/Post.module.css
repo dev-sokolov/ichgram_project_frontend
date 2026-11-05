@@ -161,8 +161,4 @@
         max-width: 100%;
         padding: 0 12px;
     }
-
-    .postImg {
-        aspect-ratio: 1 / 1;
-    }
 }
