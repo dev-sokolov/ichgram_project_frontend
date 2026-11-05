@@ -159,3 +159,9 @@
         background-color: #ffffff;
     }
 }
+
+@media (hover: none) and (pointer: coarse) {
+    .inputContainer input {
+        font-size: 16px;
+    }
+}

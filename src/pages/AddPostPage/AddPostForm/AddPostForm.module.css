@@ -236,5 +236,12 @@
         border-radius: 8px;
         padding: 10px;
         background-color: #FAFAFA;
+        font-size: 16px;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .dataText textarea {
+        font-size: 16px;
     }
 }

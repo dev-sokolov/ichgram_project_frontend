@@ -356,4 +356,14 @@
     .emptyChat {
         display: none;
     }
+
+    .input input {
+        font-size: 16px;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .input input {
+        font-size: 16px;
+    }
 }

@@ -142,4 +142,18 @@ input.inputWebsite {
         width: 100%;
         margin-top: 24px;
     }
+
+    .editUsername input,
+    .editWebsite input,
+    .editAbout textarea {
+        font-size: 16px;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .editUsername input,
+    .editWebsite input,
+    .editAbout textarea {
+        font-size: 16px;
+    }
 }
