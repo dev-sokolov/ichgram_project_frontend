@@ -13,11 +13,11 @@
     height: 38px;
     padding-left: 8px;
     border-radius: 3px;
-    border-width: 1px;
+    border: 1px solid #DBDBDB;
     color: #737373;
-    border-color: #DBDBDB;
     background-color: #FAFAFA;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .descriptionBlock {
