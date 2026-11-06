@@ -12,14 +12,20 @@
 .avatar {
     width: 44px;
     height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     margin-right: 18px;
+    flex: 0 0 44px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .avatar img {
-    width: 100%;
-    height: 100%;
+    width: 44px;
+    height: 44px;
+    max-width: none;
     object-fit: cover;
-    border-radius: 50%;
+    object-position: center;
     display: block;
 }
 
